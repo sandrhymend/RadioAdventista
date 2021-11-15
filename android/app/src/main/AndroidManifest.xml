@@ -2,7 +2,7 @@
     package="com.example.radioapp">
    <application
         android:label="radioapp"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/tru">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
