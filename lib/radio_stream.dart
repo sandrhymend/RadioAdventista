@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, must_be_immutable
 
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +10,10 @@ IconData icon = Icons.pause_circle_outline;
 // global variable.
 
 class RadioStream extends StatefulWidget {
-  late AudioHandler _audioHandler;
+  final AudioHandler _audioHandler;
 
   // ignore: use_key_in_widget_constructors
-  RadioStream(this._audioHandler);
+  const RadioStream(this._audioHandler);
 
   @override
   _RadioStreamState createState() => _RadioStreamState();

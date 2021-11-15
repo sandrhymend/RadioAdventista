@@ -6,6 +6,7 @@ class Settings {
   String mainUrl =
     "https://samcloud.spacial.com/api/listen?sid=68536&rid=155608&f=mp3,any&br=96000,any&m=m3u";
 
+  // ignore: prefer_typing_uninitialized_variables
   var newRadioLink;
 
   getUrl() async {
