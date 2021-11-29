@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print, use_key_in_widget_constructors, must_be_immutable
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -69,6 +68,7 @@ class _WebViewPageState extends State<WebViewPage> {
             _controller.complete(webViewController);
           },
           onProgress: (int progress) {
+            _myController.evaluateJavascript("document.getElementById('mobile_login_bar').style.display='none';");
             print("WebView is loading (progress : $progress%)");
           },
           javascriptChannels: <JavascriptChannel>{

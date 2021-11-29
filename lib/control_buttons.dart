@@ -31,15 +31,6 @@ class _ControlButtonsState extends State<ControlButtons> {
         IconButton(
           icon: const Icon(Icons.volume_up),
           onPressed: () {
-            // showSliderDialog(
-            //   context: context,
-            //   title: "Adjust volume",
-            //   divisions: 10,
-            //   min: 0.0,
-            //   max: 1.0,
-            //   stream: widget.player.volumeStream,
-            //   onChanged: widget.player.setVolume,
-            // );
           },
         ),
 
@@ -91,15 +82,6 @@ class _ControlButtonsState extends State<ControlButtons> {
             icon: Text("${snapshot.data?.toStringAsFixed(1)}x",
                 style: const TextStyle(fontWeight: FontWeight.bold)),
             onPressed: () {
-              // showSliderDialog(
-              //   context: context,
-              //   title: "Adjust speed",
-              //   divisions: 10,
-              //   min: 0.5,
-              //   max: 1.5,
-              //   stream: widget.player.speedStream,
-              //   onChanged: widget.player.setSpeed,
-              // );
             },
           ),
         ),
