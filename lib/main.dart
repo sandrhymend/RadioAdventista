@@ -4,8 +4,8 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:radiorala/radio_stream.dart';
-import 'package:radiorala/settings.dart';
+import 'package:rala/radio_stream.dart';
+import 'package:rala/settings.dart';
 
 String mainUrl =
     "https://samcloud.spacial.com/api/listen?sid=68536&rid=155608&f=mp3,any&br=96000,any&m=m3u";
