@@ -4,8 +4,8 @@ import 'dart:async';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:radioapp/radio_stream.dart';
-import 'package:radioapp/settings.dart';
+import 'package:radiorala/radio_stream.dart';
+import 'package:radiorala/settings.dart';
 
 String mainUrl =
     "https://samcloud.spacial.com/api/listen?sid=68536&rid=155608&f=mp3,any&br=96000,any&m=m3u";
@@ -68,7 +68,7 @@ class AudioPlayerHandler extends BaseAudioHandler with SeekHandler {
 
   static final _item = MediaItem(
     id: newRadioLink,
-    album: "RALA",
+    album: "RALA - www.RadioAdventistaLA.org",
     title: "Radio Adventista Los Angeles",
     artist: "La Voz con Sentido Eterno",
     artUri: Uri.parse(

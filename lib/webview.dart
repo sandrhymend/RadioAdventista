@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, use_key_in_widget_constructors, must_be_immutable
+// ignore_for_file: avoid_print, use_key_in_widget_constructors, must_be_immutable, empty_catches
 
 import 'dart:async';
 import 'dart:io';
@@ -68,8 +68,13 @@ class _WebViewPageState extends State<WebViewPage> {
             _controller.complete(webViewController);
           },
           onProgress: (int progress) {
-            _myController.evaluateJavascript("document.getElementById('mobile_login_bar').style.display='none';");
-            print("WebView is loading (progress : $progress%)");
+            try {
+              _myController.runJavascript("document.getElementById('mobile_login_bar').style.display='none';");
+               print("WebView is loading (progress : $progress%)");
+            } catch (e) {
+              print('Este es el error: ' + e.toString());
+            }
+
           },
           javascriptChannels: <JavascriptChannel>{
             _toasterJavascriptChannel(context),
@@ -84,13 +89,17 @@ class _WebViewPageState extends State<WebViewPage> {
             return NavigationDecision.navigate;
           },
           onPageStarted: (String url) {
-            //_myController.evaluateJavascript("document.getElementById('msite-pages-header-contents').style.display='none';document.getElementById('header').style.display='none';");
             print('Page started loading: $url');
           },
           onPageFinished: (String url) {
             // evaluateJavascript is a method to customize the UI, here i find searchfield class name and writing a javascript query string.
-            //_myController.evaluateJavascript("document.getElementsByClassName('_1n7d')[0].style.display='none';");
-            _myController.evaluateJavascript("document.getElementById('msite-pages-header-contents').style.display='none';document.getElementById('header').style.display='none';");
+            //_myController.runJavascript("document.getElementsByClassName('_1n7d')[0].style.display='none';");
+            try {
+              _myController.runJavascript("document.getElementById('msite-pages-header-contents').style.display='none';document.getElementById('header').style.display='none';");
+            } catch (e) {
+              print(e.toString());
+            }
+
           },
           gestureNavigationEnabled: true,
         );

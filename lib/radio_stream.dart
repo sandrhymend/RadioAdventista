@@ -3,7 +3,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:radioapp/webview.dart';
+import 'package:radiorala/webview.dart';
 
 IconData icon = Icons.pause_circle_outline;
 // You might want to provide this using dependency injection rather than a
@@ -78,12 +78,12 @@ class _RadioStreamState extends State<RadioStream> {
                   ),
                   const BottomNavigationBarItem(
                     icon: Icon(
-                      Icons.facebook_outlined,
+                      Icons.radio,
                       size: 62,
                     ),
                     label: 'VIDEO',
                     activeIcon: Icon(
-                      Icons.facebook_outlined,
+                      Icons.videocam,
                       color: Colors.blue,
                       size: 62,
                     ),
@@ -121,6 +121,8 @@ class _RadioStreamState extends State<RadioStream> {
                         _showDialog(context);
                       } else {
                          _selectedIndex = index;
+                        //  Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
+                        //   builder: (context) => WebViewPage(_player), maintainState: true));
                       }
                    }
                   });
