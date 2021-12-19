@@ -32,14 +32,13 @@ class _RadioStreamState extends State<RadioStream> {
   @override
   void initState() {
     super.initState();
-
   }
 
   IconButton _button(IconData iconData, VoidCallback onPressed) => IconButton(
-    icon: Icon(iconData),
-    iconSize: 64.0,
-    onPressed: onPressed,
-  );
+        icon: Icon(iconData),
+        iconSize: 64.0,
+        onPressed: onPressed,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +56,9 @@ class _RadioStreamState extends State<RadioStream> {
         backgroundColor: Colors.grey[700],
         bottomNavigationBar: StreamBuilder<bool>(
             stream: widget._audioHandler.playbackState
-                  .map((state) => state.playing)
-                  .distinct(),
-              builder: (context, snapshot) {
+                .map((state) => state.playing)
+                .distinct(),
+            builder: (context, snapshot) {
               final playing = snapshot.data ?? false;
               return BottomNavigationBar(
                 currentIndex: _selectedIndex,
@@ -104,10 +103,10 @@ class _RadioStreamState extends State<RadioStream> {
                 onTap: (index) {
                   setState(() {
                     if (index == 0) {
-                     _selectedIndex = 1;
+                      _selectedIndex = 1;
                       if (playing) {
-                         _player.pause();
-                         widget._audioHandler.pause();
+                        _player.pause();
+                        widget._audioHandler.pause();
                         icon = Icons.play_circle_outline;
                         _button(Icons.pause, widget._audioHandler.pause);
                       } else {
@@ -120,11 +119,11 @@ class _RadioStreamState extends State<RadioStream> {
                       if (index == 2) {
                         _showDialog(context);
                       } else {
-                         _selectedIndex = index;
+                        _selectedIndex = index;
                         //  Navigator.of(context, rootNavigator: true).push(MaterialPageRoute(
                         //   builder: (context) => WebViewPage(_player), maintainState: true));
                       }
-                   }
+                    }
                   });
                 },
               );
@@ -139,7 +138,8 @@ class _RadioStreamState extends State<RadioStream> {
       ),
     );
   }
-Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
+
+  Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
     return {
       '/': (context) {
         return [
@@ -168,92 +168,92 @@ Map<String, WidgetBuilder> _routeBuilders(BuildContext context, int index) {
   }
 
 // Show Dialog function
-void _showDialog(context) {
-  // flutter defined function
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      // return alert dialog object
-      return AlertDialog(
-        title: const Center(
-            child:
-                Text('About', style: TextStyle(fontWeight: FontWeight.w800))),
-        //backgroundColor: Colors.orange[50],
-        content: SizedBox(
-          height: 360,
-          child: Card(
-            //color: Colors.orange[50],
-            child: Column(
-              children: [
-                ListTile(
-                  title: const Text(
-                    'Fundador',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+  void _showDialog(context) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return alert dialog object
+        return AlertDialog(
+          title: const Center(
+              child:
+                  Text('About', style: TextStyle(fontWeight: FontWeight.w800))),
+          //backgroundColor: Colors.orange[50],
+          content: SingleChildScrollView(
+            child: Expanded(
+              //child: Card(
+              //color: Colors.orange[50],
+              child: Column(
+                children: [
+                  ListTile(
+                    title: const Text(
+                      'Fundador',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: const Text(
+                        'Southern California Conference Hispanic Region'),
+                    leading: Icon(
+                      Icons.map,
+                      color: Colors.blue[500],
+                    ),
                   ),
-                  subtitle: const Text(
-                      'Southern California Conference Hispanic Region'),
-                  leading: Icon(
-                    Icons.map,
-                    color: Colors.blue[500],
+                  const Divider(),
+                  ListTile(
+                    title: const Text(
+                      'Fundada en',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: const Text('2015'),
+                    leading: Icon(
+                      Icons.home,
+                      color: Colors.blue[500],
+                    ),
                   ),
-                ),
-                const Divider(),
-                ListTile(
-                  title: const Text(
-                    'Fundada en',
-                    style: TextStyle(fontWeight: FontWeight.w500),
+                  const Divider(),
+                  ListTile(
+                    title: const Text('Pagina web'),
+                    subtitle: const Text('radioadventistala.org'),
+                    leading: Icon(
+                      Icons.web,
+                      color: Colors.blue[500],
+                    ),
                   ),
-                  subtitle: const Text('2015'),
-                  leading: Icon(
-                    Icons.home,
-                    color: Colors.blue[500],
+                  const Divider(),
+                  ListTile(
+                    title: const Text(
+                      'Contacto',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    subtitle: const Text('(323) 539-8377'),
+                    leading: Icon(
+                      Icons.contact_phone,
+                      color: Colors.blue[500],
+                    ),
                   ),
-                ),
-                const Divider(),
-                ListTile(
-                  title: const Text('Pagina web'),
-                  subtitle: const Text('radioadventistala.org'),
-                  leading: Icon(
-                    Icons.web,
-                    color: Colors.blue[500],
-                  ),
-                ),
-                const Divider(),
-                ListTile(
-                  title: const Text(
-                    'Contacto',
-                    style: TextStyle(fontWeight: FontWeight.w500),
-                  ),
-                  subtitle: const Text('(323) 539-8377'),
-                  leading: Icon(
-                    Icons.contact_phone,
-                    color: Colors.blue[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: <Widget>[
-          GestureDetector(
-            onTap: () {
-              Navigator.of(context).pop();
-            },
-            child: const Align(
-              alignment: Alignment.topRight,
-              child: CircleAvatar(
-                radius: 14.0,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.close, color: Colors.red),
+                ],
               ),
             ),
           ),
-        ],
-      );
-    },
-  );
-}
-
+          // ),
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: const Align(
+                alignment: Alignment.topRight,
+                child: CircleAvatar(
+                  radius: 14.0,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.close, color: Colors.red),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class MediaState {

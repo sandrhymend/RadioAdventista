@@ -1,4 +1,9 @@
-// ignore_for_file: avoid_print, use_key_in_widget_constructors, must_be_immutable, empty_catches
+// ignore_for_file: avoid_print, use_key_in_widget_constructors, must_be_immutable, empty_catches, avoid_unnecessary_containers
+// Copyright 2013 The Flutter Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+// ignore_for_file: public_member_api_docs
 
 import 'dart:async';
 import 'dart:io';
@@ -7,22 +12,63 @@ import 'package:just_audio/just_audio.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 
-const String kNavigationPage = '''
+const String kNavigationExamplePage = '''
 <!DOCTYPE html><html>
-<head><title>Navigation Delegate</title></head>
+<head><title>Navigation Delegate Example</title></head>
 <body>
 <p>
 The navigation delegate is set to block navigation to the youtube website.
 </p>
 <ul>
-<ul><a href="https://www.youtube.com/channel/UC1T_XyYVMZvpgwWKwZ-pBUA/videos/">https://www.youtube.com/channel/UC1T_XyYVMZvpgwWKwZ-pBUA/videos/</a></ul>
+<ul><a href="https://www.youtube.com/">https://www.youtube.com/</a></ul>
 <ul><a href="https://www.google.com/">https://www.google.com/</a></ul>
 </ul>
 </body>
 </html>
 ''';
 
+const String kLocalExamplePage = '''
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Load file or HTML string example</title>
+</head>
+<body>
+
+<h1>Local demo page</h1>
+<p>
+  This is an example page used to demonstrate how to load a local file or HTML
+  string using the <a href="https://pub.dev/packages/webview_flutter">Flutter
+  webview</a> plugin.
+</p>
+
+</body>
+</html>
+''';
+
+const String kTransparentBackgroundPage = '''
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <title>Transparent background test</title>
+  </head>
+  <style type="text/css">
+    body { background: transparent; margin: 0; padding: 0; }
+    #container { position: relative; margin: 0; padding: 0; width: 100vw; height: 100vh; }
+    #shape { background: red; width: 200px; height: 200px; margin: 0; padding: 0; position: absolute; top: calc(50% - 100px); left: calc(50% - 100px); }
+    p { text-align: center; }
+  </style>
+  <body>
+    <div id="container">
+      <p>Transparent background test</p>
+      <div id="shape"></div>
+    </div>
+  </body>
+  </html>
+''';
+
 class WebViewPage extends StatefulWidget {
+
   AudioPlayer player;
 
   // ignore: use_key_in_widget_constructors
@@ -33,25 +79,25 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
-  late WebViewController _myController;
   final Completer<WebViewController> _controller =
-     Completer<WebViewController>();
+      Completer<WebViewController>();
+
+  late WebViewController _webViewController;
 
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    if (Platform.isAndroid) {
+      WebView.platform = SurfaceAndroidWebView();
+    }
   }
-
-  final Text pageTitle = const Text('Radio Adventista Los Angeles');
-  final String selectedUrl =
-      'https://m.facebook.com/pg/radioadventistalosangeles/posts/';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        title: pageTitle,
+        title: const Text('Radio Adventista Los Angeles'),
         // This drop down menu demonstrates that Flutter widgets can be shown over the web view.
         actions: <Widget>[
           NavigationControls(_controller.future),
@@ -61,28 +107,21 @@ class _WebViewPageState extends State<WebViewPage> {
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          initialUrl: selectedUrl,
+          initialUrl: 'https://www.facebook.com/pg/radioadventistalosangeles/posts/',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
-            _myController = webViewController;
+            _webViewController = webViewController;
             _controller.complete(webViewController);
           },
           onProgress: (int progress) {
-            try {
-              _myController.runJavascript("document.getElementById('mobile_login_bar').style.display='none';");
-               print("WebView is loading (progress : $progress%)");
-            } catch (e) {
-              print('Este es el error: ' + e.toString());
-            }
-
+            print('WebView is loading (progress : $progress%)');
           },
           javascriptChannels: <JavascriptChannel>{
             _toasterJavascriptChannel(context),
           },
           navigationDelegate: (NavigationRequest request) {
-            if (request.url.startsWith(
-                'https://www.youtube.com/channel/UC1T_XyYVMZvpgwWKwZ-pBUA/videos/')) {
-              print('bloccking navigation to $request}');
+            if (request.url.startsWith('https://www.youtube.com/channel/UC1T_XyYVMZvpgwWKwZ-pBUA/videos/')) {
+              print('blocking navigation to $request}');
               return NavigationDecision.prevent;
             }
             print('allowing navigation to $request');
@@ -91,20 +130,18 @@ class _WebViewPageState extends State<WebViewPage> {
           onPageStarted: (String url) {
             print('Page started loading: $url');
           },
-          onPageFinished: (String url) {
-            // evaluateJavascript is a method to customize the UI, here i find searchfield class name and writing a javascript query string.
-            //_myController.runJavascript("document.getElementsByClassName('_1n7d')[0].style.display='none';");
-            try {
-              _myController.runJavascript("document.getElementById('msite-pages-header-contents').style.display='none';document.getElementById('header').style.display='none';");
-            } catch (e) {
-              print(e.toString());
-            }
-
+          onPageFinished: (String url) async {
+            _webViewController.runJavascript("javascript:(function() { " +
+                    "var head = document.getElementById('msite-pages-header-contents', 'mobile_login_bar');" +
+                    "head.parentNode.removeChild(head);" +
+                    "})()")
+                .then((value) => debugPrint('Page finished loading Javascript'))
+                .catchError((onError) => debugPrint('$onError'));
           },
           gestureNavigationEnabled: true,
+          backgroundColor: const Color(0x00000000),
         );
       }),
-      //floatingActionButton: favoriteButton(),
     );
   }
 
@@ -121,7 +158,9 @@ class _WebViewPageState extends State<WebViewPage> {
 }
 
 class NavigationControls extends StatelessWidget {
-  const NavigationControls(this._webViewControllerFuture);
+  const NavigationControls(this._webViewControllerFuture)
+      : assert(_webViewControllerFuture != null);
+
   final Future<WebViewController> _webViewControllerFuture;
 
   @override
@@ -132,7 +171,7 @@ class NavigationControls extends StatelessWidget {
           (BuildContext context, AsyncSnapshot<WebViewController> snapshot) {
         final bool webViewReady =
             snapshot.connectionState == ConnectionState.done;
-        final WebViewController controller = snapshot.data!;
+        final WebViewController? controller = snapshot.data;
         return Row(
           children: <Widget>[
             IconButton(
@@ -140,12 +179,12 @@ class NavigationControls extends StatelessWidget {
               onPressed: !webViewReady
                   ? null
                   : () async {
-                      if (await controller.canGoBack()) {
+                      if (await controller!.canGoBack()) {
                         await controller.goBack();
                       } else {
                         // ignore: deprecated_member_use
                         Scaffold.of(context).showSnackBar(
-                          const SnackBar(content: Text("No back history item")),
+                          const SnackBar(content: Text('No back history item')),
                         );
                         return;
                       }
@@ -156,13 +195,13 @@ class NavigationControls extends StatelessWidget {
               onPressed: !webViewReady
                   ? null
                   : () async {
-                      if (await controller.canGoForward()) {
+                      if (await controller!.canGoForward()) {
                         await controller.goForward();
                       } else {
                         // ignore: deprecated_member_use
                         Scaffold.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text("No forward history item")),
+                              content: Text('No forward history item')),
                         );
                         return;
                       }
@@ -173,8 +212,7 @@ class NavigationControls extends StatelessWidget {
               onPressed: !webViewReady
                   ? null
                   : () {
-                      print('controller reload');
-                      controller.reload();
+                      controller!.reload();
                     },
             ),
           ],
